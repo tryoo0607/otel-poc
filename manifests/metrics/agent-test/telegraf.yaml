@@ -1,0 +1,55 @@
+services:
+  telegraf:
+    image: telegraf:1.33.0
+    container_name: telegraf
+    # ports:
+    #   - "8092:8092"
+    #   - "8094:8094"
+    #   - "8125:8125"
+    volumes:
+      - ${OTEL_POC_DIR}/configs/metrics/agent-test/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    restart: always
+
+  influxdb:
+    image: influxdb:1.8.10
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=testdb
+      - INFLUXDB_ADMIN_ENABLED=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+      - INFLUXDB_USER=telegraf
+      - INFLUXDB_USER_PASSWORD=telegraf123
+    volumes:
+      - ${OTEL_POC_VOLUMES}/metrics/agent-test/influxdb/data:/var/lib/influxdb
+      - ${OTEL_POC_DIR}/configs/matrics/agent-test/influxdb:/etc/influxdb
+    restart: always
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--web.enable-lifecycle'
+      - '--web.route-prefix=/'
+      - '--web.enable-remote-write-receiver'
+    volumes:
+      - ${OTEL_POC_DIR}/configs/metrics/agent-test/prometheus/:/etc/prometheus/
+      - ${OTEL_POC_VOLUMES}/metrics/agent-test/prometheus/prometheus:/prometheus
+    restart: always
+
+  chronograf:
+    image: chronograf:1.5.0
+    container_name: chronograf
+    ports:
+      - "8888:8888"
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+    depends_on:
+      - influxdb
+    restart: always

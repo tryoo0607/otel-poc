@@ -1,0 +1,55 @@
+services:
+  otel:
+    image: otel/opentelemetry-collector-contrib
+    container_name: otel
+    volumes:
+      - ${OTEL_POC_DIR}/configs/metrics/agent-test/case_hostmetrics/otel/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+    - "9464:9464" # prometheus
+    #  - "4317:4317" # OTLP gRPC receiver
+    # - "4318:4318" # OTLP HTTP receiver
+    restart: always
+
+  influxdb:
+    image: influxdb:1.8.10
+    container_name: influxdb
+    ports:
+      - "18086:8086"
+    environment:
+      - INFLUXDB_DB=testdb
+      - INFLUXDB_ADMIN_ENABLED=true
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+      - INFLUXDB_USER=telegraf
+      - INFLUXDB_USER_PASSWORD=telegraf123
+    volumes:
+      - ${OTEL_POC_VOLUMES}/metrics/agent-test/case_hostmetrics/influxdb/data:/var/lib/influxdb
+      - ${OTEL_POC_DIR}/configs/metrics/agent-test/case_hostmetrics/influxdb/config:/etc/influxdb
+    restart: always
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--web.enable-lifecycle'
+      - '--web.route-prefix=/'
+      - '--web.enable-remote-write-receiver'
+    volumes:
+      - ${OTEL_POC_DIR}/connfigs/metrics/agent-test/case_hostmetrics/prometheus/:/etc/prometheus/
+      - ${OTEL_POC_VOILUMES}/metrtics/agent-test/case_hostmetrics/prometheus:/prometheus
+    restart: always
+  
+  chronograf:
+    image: chronograf:1.5.0
+    container_name: chronograf
+    ports:
+      - "18888:8888"
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+    depends_on:
+      - influxdb
+    restart: always

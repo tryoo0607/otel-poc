@@ -7,7 +7,7 @@ services:
     #   - "8094:8094"
     #   - "8125:8125"
     volumes:
-      - ${OTEL_POC_DIR}/configs/metrics/agent-test/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ${OTEL_POC_DIR}/configs/metrics/agent-test/case_telegraf/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     restart: always
 
   influxdb:
@@ -25,7 +25,7 @@ services:
       - INFLUXDB_USER_PASSWORD=telegraf123
     volumes:
       - ${OTEL_POC_VOLUMES}/metrics/agent-test/influxdb/data:/var/lib/influxdb
-      - ${OTEL_POC_DIR}/configs/matrics/agent-test/influxdb:/etc/influxdb
+      - ${OTEL_POC_DIR}/configs/matrics/agent-test/case_telegraf/influxdb:/etc/influxdb
     restart: always
 
   prometheus:
@@ -39,8 +39,8 @@ services:
       - '--web.route-prefix=/'
       - '--web.enable-remote-write-receiver'
     volumes:
-      - ${OTEL_POC_DIR}/configs/metrics/agent-test/prometheus/:/etc/prometheus/
-      - ${OTEL_POC_VOLUMES}/metrics/agent-test/prometheus/prometheus:/prometheus
+      - ${OTEL_POC_DIR}/configs/metrics/agent-test/case_telegraf/prometheus/:/etc/prometheus/
+      - ${OTEL_POC_VOLUMES}/metrics/agent-test/case_telegraf/prometheus/prometheus:/prometheus
     restart: always
 
   chronograf:

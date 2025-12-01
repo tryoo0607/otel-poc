@@ -29,5 +29,5 @@
 
 
 ## ENV
-- ${OTEL_POC_DIR} : 이 프로젝트 Root 경로
-- ${OTEL_POC_VOLUMES} : 데이터 저장 위한 경로
+- `${OTEL_POC_DIR}` : 이 프로젝트의 경로 (ex. /home/user/otel-poc)
+- `${OTEL_POC_VOLUMES}` : 데이터 저장 위한 경로 (ex. /home/user/docker-volumes)

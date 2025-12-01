@@ -35,8 +35,7 @@
 <br/>
 
 ## case_telegraf
-
-**Telegraf → Prometheus / InfluxD**B 구조
+- **Telegraf → Prometheus / InfluxD**B 구조
 - Telegraf가 host metrics 수집 + Prometheus exporter 역할을 수행함
 
 ```text

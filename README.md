@@ -14,10 +14,15 @@
 <br/>
 <br/>
 
-## 구성 요소 간단 설명
+## 구성 요소
 
 | 경로 | 설명 |
 |------|------|
 | `configs/` | Collector Receivers / Processors / Exporters 설정 파일 |
 | `manifests/` | Kubernetes 배포 및 테스트 환경 구성 매니페스트 |
 | `README.md` | 사용 가이드 및 실험 결과 정리 |
+
+
+## ENV
+- ${OTEL_POC_DIR} : 이 프로젝트 Root 경로
+- ${OTEL_POC_VOLUMES} : 데이터 저장 위한 경로

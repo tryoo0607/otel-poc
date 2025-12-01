@@ -1,0 +1,45 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'node'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['otel-agent:9464']
+
+exporters:
+  proimetheus:
+    endpoint: "0.0.0.0:9464"
+
+  influxdb:
+    endpoint: http://influxdb:8086
+    timeout: 5s
+    v1_compatibility:
+      enabled: true
+      db: testdb
+      username: admin
+      password: admin
+    span_dimensions:
+      - service.name
+      - span.name
+    log_record_dimensions:
+      - service.name
+    metrics_schema: telegraf-prometheus-v1
+    sending_queue:
+      enabled: true
+      num_consumers: 3
+      queue_size: 10
+    retry_on_failure:
+      enabled: true
+      initial_interval: 1s
+      max_interval: 3s
+      max_elapsed_time: 10s
+
+  debug:
+    verbosity: detailed
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      exporters: [prometheus, influxdb,  debug]

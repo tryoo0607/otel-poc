@@ -3,8 +3,8 @@
 <br/>
 
 ## case_hostmetrics
-**OpenTelemetry Collector → Prometheus / InfluxDB** 구조  
-호스트 메트릭을 OTEL Collector가 직접 수집하는 방식
+- **OpenTelemetry Collector → Prometheus / InfluxDB** 구조  
+- 호스트 메트릭을 OTEL Collector가 직접 수집하는 방식
 
 ```text
 +------------------------+
@@ -37,7 +37,7 @@
 ## case_telegraf
 
 **Telegraf → Prometheus / InfluxD**B 구조
-Telegraf가 host metrics 수집 + Prometheus exporter 역할을 수행함
+- Telegraf가 host metrics 수집 + Prometheus exporter 역할을 수행함
 
 ```text
 +------------------------+

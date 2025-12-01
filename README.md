@@ -20,7 +20,7 @@
 |------|------|
 | `configs/` | Collector Receivers / Processors / Exporters 설정 파일 |
 | `manifests/` | Kubernetes 배포 및 테스트 환경 구성 매니페스트 |
-| `README.md` | 사용 가이드 및 실험 결과 정리 |
+| `README.md` | 사용 가이드 및 실험 결과 정리, `manifests/` 하위에서만 작성 |
 
 
 <br/>

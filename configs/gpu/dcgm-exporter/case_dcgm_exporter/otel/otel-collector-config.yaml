@@ -1,0 +1,24 @@
+receivers:
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'dcgm-gpu-metrics'
+          scrape_interval: 30s
+          static_configs:
+            - targets: ['localhost:9400']
+          metric_relabel_configs:
+            # Keep only DCGM metrics
+            - source_labels: [__name__]
+              regex: 'DCGM_.*'
+              action: keep
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:9464"
+  debug:
+    verbosity: detailed
+
+service:
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      exporters: [prometheus, debug]

@@ -1,0 +1,45 @@
+services:
+  dcgm-exporter:
+    image: nvcr.io/nvidia/k8s/dcgm-exporter:3.3.5-3.4.0-ubuntu22.04
+    container_name: dcgm-exporter
+    restart: always
+    network_mode: host
+    
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+
+    # 필요한 권한 추가
+    cap_add:
+      - SYS_ADMIN
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib
+    container_name: otel-collector
+    network_mode: host
+    volumes:
+      - ${OTEL_POC_DIR}/configs/gpu/dcgm-exporter/case_dcgm_exporter/otel/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+    #ports:
+    #  - "4317:4317" # OTLP gRPC receiver
+    #  - "4318:4318" # OTLP HTTP receiver
+    #  - "9464:9464"
+    restart: always
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    network_mode: host
+    #ports:
+    #  - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--web.enable-lifecycle'
+      - '--web.route-prefix=/'
+      - '--web.enable-remote-write-receiver'
+    volumes:
+      - ${OTEL_POC_DIR}/configs/gpu/dcgm-exporter/case_dcgm_exporter/prometheus/:/etc/prometheus/
+      - ${OTEL_POC_VOLUMES}/configs/gpu/dcgm-exporter/case_dcgm_exporter/prometheus:/prometheus
+    restart: always
+

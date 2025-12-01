@@ -1,5 +1,7 @@
 # otel-poc
 
+<br/>
+
 ## 프로젝트 개요
 
 **otel-poc** 는 OpenTelemetry 기반 메트릭 수집 및 관측성 구조 테스트를 위한 PoC 용도.

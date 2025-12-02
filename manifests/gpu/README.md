@@ -16,5 +16,9 @@ GPU 리소스 수집하기 위한 설정 모음
 <br/>
 
 
-## nvidia-container-toolkit
-- Container를 사용할 경우 GPU 리소스를 인식하기 위해 해당 바이너리 설치 필요
+## 필수 사항
+- ` nvidia-container-toolkit`
+  - Container를 사용할 경우 GPU 리소스를 인식하기 위해 해당 바이너리 설치 필요
+
+<br/>
+<br/>
